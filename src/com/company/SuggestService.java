@@ -1,12 +1,6 @@
 package com.company;
 
-// import java.util.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
+import java.util.*;
 
 public class SuggestService {
     /**
@@ -107,15 +101,20 @@ public class SuggestService {
         // префиксное дерево
         this.trie = new Trie();
 
-        // for(String name : companyNames) { TODO
-
-        // }
-        //TODO: Your code
+        for(String name : companyNames) {
+            this.trie.addName(name, true);
+        }
     }
 
     public List<String> suggest(String input, Integer numberOfSuggest) {
-        // подсказка
-        return Collections.emptyList();
-        //TODO: Your code
+        if (this.trie.checkName(input)) {
+            LinkedList<String> names = new LinkedList<>();
+
+            this.trie.getName(names, input, numberOfSuggest);
+            return Collections.unmodifiableList(names);
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 }

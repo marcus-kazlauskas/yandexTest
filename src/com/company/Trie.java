@@ -1,6 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,58 +8,66 @@ public class Trie {
      * Префиксное дерево
      */
     private final TrieNode root;  // корень дерева
+    private TrieNode currentNode;  // узел дерева, с которым сейчас работаем
 
     Trie() {
         this.root = new TrieNode();
+        this.currentNode = this.root;
     }
 
     // добавление/удаление имени в дерево
     void addName(String name, boolean val) {
         char[] c = name.toCharArray();
-        TrieNode currentNode = this.root;
+        // TrieNode currentNode = this.root;
+        this.currentNode = this.root;
 
         for (int i = 0; i < c.length - 1; i++) {
-            if (!currentNode.checkNode()) {
-                currentNode.addNode();
+            if (!this.currentNode.checkNode()) {
+                this.currentNode.addNode();
             }
             if (i == c.length - 1) {
-                currentNode.addLetter(c[i], val);
+                this.currentNode.addLetter(c[i], val);
             }
             else {
-                currentNode = currentNode.nextNode(c[i]);
+                this.currentNode = this.currentNode.nextNode(c[i]);
             }
         }
     }
 
-    // поиск имени в дереве
+    // поиск имени в дереве с сохранением указателя на узел, следующий за найденным словом
     boolean checkName(String name) {
         char[] c = name.toCharArray();
-        TrieNode currentNode = this.root;
+        // TrieNode currentNode = this.root;
+        this.currentNode = this.root;
 
         for (int i = 0; i < c.length - 1; i++) {
-            if (!currentNode.checkNode()) {
+            if (!this.currentNode.checkNode()) {
                 return false;
             }
             if (i == c.length - 1) {
-                return currentNode.checkLetter(c[i]);
+                boolean check = this.currentNode.checkLetter(c[i]);
+
+                if (check) {
+                    this.currentNode = this.currentNode.nextNode(c[i]);
+                }
+                return check;
             }
-            currentNode = currentNode.nextNode(c[i]);
+            this.currentNode = this.currentNode.nextNode(c[i]);
         }
         return false;
     }
 
-    // вывод списка первых number имён из дерева
-    /*List<String> getNames(int number) {
-        LinkedList<String> names = new LinkedList<>();
-        ArrayList<Character> letters = new ArrayList<>();
-        TrieNode currentNode = this.root;
+    // добавление в список первых number имён из дерева
+    void getName(LinkedList<String> names, String input, Integer number) {
+        LinkedList<Character> letters = new LinkedList<>();
 
-        if (currentNode.checkNode()) {
-            for (int i = 0; i < SuggestService.ALPHABET_SIZE; i++) {
-                char letter = SuggestService.getLetter(i);
+        if (this.checkName(input)) {
+            char[] inputLetters = input.toCharArray();
 
+            for (char c : inputLetters) {
+                letters.addLast(c);
             }
+            this.currentNode.getName(names, letters, number);
         }
-        return names;
-    }*/
+    }
 }
