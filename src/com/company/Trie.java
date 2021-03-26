@@ -1,7 +1,7 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Trie {
     /**
@@ -18,10 +18,9 @@ public class Trie {
     // добавление/удаление имени в дерево
     void addName(String name, boolean val) {
         char[] c = name.toCharArray();
-        // TrieNode currentNode = this.root;
         this.currentNode = this.root;
 
-        for (int i = 0; i < c.length - 1; i++) {
+        for (int i = 0; i < c.length; i++) {
             if (!this.currentNode.checkNode()) {
                 this.currentNode.addNode();
             }
@@ -34,38 +33,42 @@ public class Trie {
         }
     }
 
-    // поиск имени в дереве с сохранением указателя на узел, следующий за найденным словом
-    boolean checkName(String name) {
+    // поиск имени или его части в дереве с сохранением указателя на узел, следующий за найденным словом
+    boolean checkName(String name, boolean val) {
         char[] c = name.toCharArray();
-        // TrieNode currentNode = this.root;
         this.currentNode = this.root;
+        boolean check = false;
 
-        for (int i = 0; i < c.length - 1; i++) {
+        for (int i = 0; i < c.length; i++) {
             if (!this.currentNode.checkNode()) {
                 return false;
             }
             if (i == c.length - 1) {
-                boolean check = this.currentNode.checkLetter(c[i]);
-
-                if (check) {
-                    this.currentNode = this.currentNode.nextNode(c[i]);
-                }
-                return check;
+                check = this.currentNode.checkLetter(c[i], val);
             }
             this.currentNode = this.currentNode.nextNode(c[i]);
         }
-        return false;
+        return check;
     }
 
-    // добавление в список первых number имён из дерева
+    // добавление в список первых number имён из дерева, имеющих общую часть input
     void getName(LinkedList<String> names, String input, Integer number) {
-        LinkedList<Character> letters = new LinkedList<>();
+        ArrayList<Character> letters = new ArrayList<>();
 
-        if (this.checkName(input)) {
+        if (this.checkName(input, true)) {
             char[] inputLetters = input.toCharArray();
 
             for (char c : inputLetters) {
-                letters.addLast(c);
+                letters.add(c);
+            }
+            this.currentNode.addLetters(names, letters);
+            this.currentNode.getName(names, letters, number);
+        }
+        else if (this.checkName(input, false)) {
+            char[] inputLetters = input.toCharArray();
+
+            for (char c : inputLetters) {
+                letters.add(c);
             }
             this.currentNode.getName(names, letters, number);
         }

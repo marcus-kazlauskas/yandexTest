@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class TrieNode {
     /**
@@ -25,8 +26,7 @@ public class TrieNode {
     // получение ссылки на следующий узел
     TrieNode nextNode(char letter) {
         int pos = SuggestService.getLetterPos(letter);
-
-        return this.node[pos];
+        return this.nextNode(pos);
     }
 
     // получение ссылки на следующий узел по номеру позиции буквы в словаре
@@ -47,39 +47,59 @@ public class TrieNode {
     // (да, удаление получается неполным, так как память не освобождается)
     void addLetter(char letter, boolean val) {
         int pos = SuggestService.getLetterPos(letter);
-
         this.node[pos].val = val;
     }
 
-    // проверка наличия буквы в узле
-    boolean checkLetter(char letter) {
+    // проверка наличия буквы в узле или наличия буквы в потомке
+    boolean checkLetter(char letter, boolean val) {
         int pos = SuggestService.getLetterPos(letter);
-
-        return this.node[pos].val;
+        return this.checkLetterPos(pos, val);
     }
 
-    // проверка наличия буквы в узле по её позиции в словаре
-    boolean checkLetterPos(int pos) {
-        return this.node[pos].val;
+    // проверка наличия буквы в узле или наличия буквы в потомке по её позиции в словаре
+    boolean checkLetterPos(int pos, boolean val) {
+        if (val) {
+            return this.node[pos].val;
+        }
+        else {
+            return this.node[pos].next;
+        }
+    }
+
+    // добавления списка букв как новое слово в список
+    void addLetters(LinkedList<String> names, ArrayList<Character> letters) {
+        char[] letterArray = new char[letters.size()];
+        for (int i = 0; i < letters.size(); i++) {
+            letterArray[i] = letters.get(i);
+        }
+        String name = String.valueOf(letterArray);
+        names.addLast(name);
     }
 
     // рекурсивный обход узлов дерева с накоплением не более number имён
     // (наверное, тут бы пригодилась Scala)
-    void getName(LinkedList<String> names, LinkedList<Character> letters, Integer number) {
-        if (this.checkNode()) {
-            for (int pos = 0; pos < SuggestService.ALPHABET_SIZE; pos++) {
-                if (this.checkLetterPos(pos) & (names.size() < number)) {
-                    char letter = SuggestService.getLetter(pos);
-                    TrieNode nextNode = this.nextNode(pos);
+    void getName(LinkedList<String> names, ArrayList<Character> letters, Integer number) {
+        if (this.checkNode() & (names.size() < number)) {
+            char letter;
+            TrieNode nextNode;
 
-                    letters.addLast(letter);
+            for (int pos = 0; pos < SuggestService.ALPHABET_SIZE; pos++) {
+                if (this.checkLetterPos(pos, true) & (names.size() < number)) {
+                    letter = SuggestService.getLetter(pos);
+                    letters.add(letter);
+                    this.addLetters(names, letters);
+                    nextNode = this.nextNode(pos);
                     nextNode.getName(names, letters, number);
-                    letters.removeLast();
+                    letters.remove(letters.size() - 1);
+                }
+                else if (this.checkLetterPos(pos, false) & (names.size() < number)) {
+                    letter = SuggestService.getLetter(pos);
+                    letters.add(letter);
+                    nextNode = this.nextNode(pos);
+                    nextNode.getName(names, letters, number);
+                    letters.remove(letters.size() - 1);
                 }
             }
         }
-        String name = letters.toString();
-
-        names.addLast(name);
     }
 }

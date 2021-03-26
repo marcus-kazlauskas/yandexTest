@@ -107,7 +107,7 @@ public class SuggestService {
     }
 
     public List<String> suggest(String input, Integer numberOfSuggest) {
-        if (this.trie.checkName(input)) {
+        if (this.trie.checkName(input, true) | this.trie.checkName(input, false)) {
             LinkedList<String> names = new LinkedList<>();
 
             this.trie.getName(names, input, numberOfSuggest);

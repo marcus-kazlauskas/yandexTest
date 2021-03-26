@@ -11,11 +11,12 @@ public class Main {
         companyNames.addLast("слова");
         companyNames.addLast("слово");
         companyNames.addLast("слово божие");
+        companyNames.addLast("слово пастыря");
         companyNames.addLast("словообразование");
         companyNames.addLast("словесный");
         companyNames.addLast("словесность");
         String input = "слово";
-        Integer numberOfSuggest = 2;
+        Integer numberOfSuggest = 3;
 
         SuggestService service = new SuggestService(companyNames);
         List<String> suggest = service.suggest(input, numberOfSuggest);
