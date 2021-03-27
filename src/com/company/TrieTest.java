@@ -134,6 +134,7 @@ public class TrieTest {
             currentNode = currentNode.nextNode(c[i]);
         }
         assertTrue(check);
+        System.out.println(number);
 
         ArrayList<Character> letters = new ArrayList<>();
         char[] inputLetters = input.toCharArray();
