@@ -21,9 +21,8 @@ public class Main {
         SuggestService service = new SuggestService(companyNames);
         List<String> suggest = service.suggest(input, numberOfSuggest);
 
-        for (String name : suggest /*companyNames*/) {
+        for (String name : suggest) {
             System.out.println(name);
         }
     }
 }
-//

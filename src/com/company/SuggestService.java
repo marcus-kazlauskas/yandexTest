@@ -87,7 +87,8 @@ public class SuggestService {
         rangeMap.put(33, ' ');
     }
 
-    private final Trie trie;
+    private final TrieNode root;  // корень дерева
+    private TrieNode currentNode;  // узел дерева, с которым сейчас работаем
 
     static int getLetterPos(char letter) {
         return letterMap.get(letter);
@@ -97,20 +98,71 @@ public class SuggestService {
         return rangeMap.get(pos);
     }
 
-    public SuggestService(List<String> companyNames) {
-        // префиксное дерево
-        this.trie = new Trie();
+    // добавление/удаление имени в дерево
+    void addName(String name, boolean val) {
+        char[] c = name.toCharArray();
+        this.currentNode = this.root;
 
-        for(String name : companyNames) {
-            this.trie.addName(name, true);
+        for (int i = 0; i < c.length; i++) {
+            if (!this.currentNode.checkNode()) {
+                this.currentNode.addNode();
+            }
+            if (i == c.length - 1) {
+                this.currentNode.addLetter(c[i], val);
+            }
+            else {
+                this.currentNode = this.currentNode.nextNode(c[i]);
+            }
         }
     }
 
-    public List<String> suggest(String input, Integer numberOfSuggest) {
-        if (this.trie.checkName(input, true) | this.trie.checkName(input, false)) {
-            LinkedList<String> names = new LinkedList<>();
+    // поиск имени или его части в дереве с сохранением указателя на узел, следующий за найденным словом
+    boolean checkName(String name, boolean val) {
+        char[] c = name.toCharArray();
+        this.currentNode = this.root;
+        boolean check = false;
 
-            this.trie.getName(names, input, numberOfSuggest);
+        for (int i = 0; i < c.length; i++) {
+            if (!this.currentNode.checkNode()) {
+                return false;
+            }
+            if (i == c.length - 1) {
+                check = this.currentNode.checkLetter(c[i], val);
+            }
+            this.currentNode = this.currentNode.nextNode(c[i]);
+        }
+        return check;
+    }
+
+    boolean checkEmpty(String name) {
+        this.currentNode = this.root;
+        return name.equals("");
+    }
+
+    public SuggestService(List<String> companyNames) {
+        this.root = new TrieNode();
+        // this.currentNode = this.root;
+        for(String name : companyNames) {
+            this.addName(name, true);
+        }
+    }
+
+    // добавление в список первых numberOfSuggest имён из дерева, имеющих общую часть input
+    public List<String> suggest(String input, Integer numberOfSuggest) {
+        LinkedList<String> names = new LinkedList<>();
+        ArrayList<Character> letters = new ArrayList<>();
+        char[] inputLetters = input.toCharArray();
+        for (char c : inputLetters) {
+            letters.add(c);
+        }
+
+        if (this.checkName(input, true)) {
+            this.currentNode.addLetters(names, letters);
+            this.currentNode.getName(names, letters, numberOfSuggest);
+            return Collections.unmodifiableList(names);
+        }
+        else if (this.checkName(input, false) || this.checkEmpty(input)) {
+            this.currentNode.getName(names, letters, numberOfSuggest);
             return Collections.unmodifiableList(names);
         }
         else {
@@ -118,4 +170,3 @@ public class SuggestService {
         }
     }
 }
-//

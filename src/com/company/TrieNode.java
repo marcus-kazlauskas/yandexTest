@@ -79,12 +79,12 @@ public class TrieNode {
     // рекурсивный обход узлов дерева с накоплением не более number имён
     // (наверное, тут бы пригодилась Scala)
     void getName(LinkedList<String> names, ArrayList<Character> letters, Integer number) {
-        if (this.checkNode() & (names.size() < number)) {
+        if (this.checkNode() && (names.size() < number)) {
             char letter;
             TrieNode nextNode;
 
             for (int pos = 0; pos < SuggestService.ALPHABET_SIZE; pos++) {
-                if (this.checkLetterPos(pos, true) & (names.size() < number)) {
+                if (this.checkLetterPos(pos, true) && (names.size() < number)) {
                     letter = SuggestService.getLetter(pos);
                     letters.add(letter);
                     this.addLetters(names, letters);
@@ -92,7 +92,7 @@ public class TrieNode {
                     nextNode.getName(names, letters, number);
                     letters.remove(letters.size() - 1);
                 }
-                else if (this.checkLetterPos(pos, false) & (names.size() < number)) {
+                else if (this.checkLetterPos(pos, false) && (names.size() < number)) {
                     letter = SuggestService.getLetter(pos);
                     letters.add(letter);
                     nextNode = this.nextNode(pos);
@@ -103,4 +103,3 @@ public class TrieNode {
         }
     }
 }
-//
