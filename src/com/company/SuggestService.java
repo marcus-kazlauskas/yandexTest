@@ -9,7 +9,7 @@ public class SuggestService {
     // размер алфавита
     public static final int ALPHABET_SIZE = 34;
     // словарь "буква - ранг по частоте использования"
-    private static final Map<Character, Integer> letterMap = new HashMap<>(64);
+    private static final Map<Character, Integer> letterMap = new HashMap<>(128);
     // словарь "ранг по частоте использования - буква"
     private static final Map<Integer, Character> rangeMap = new HashMap<>(64);
 
@@ -48,7 +48,40 @@ public class SuggestService {
         letterMap.put('ф', 30);
         letterMap.put('ъ', 31);
         letterMap.put('ё', 32);
-        letterMap.put(' ', 33);
+        // продолжение словаря "буква - ранг по частоте использования" с заглавными буквами
+        letterMap.put('О', 0);
+        letterMap.put('А', 2);
+        letterMap.put('И', 3);
+        letterMap.put('Н', 4);
+        letterMap.put('Т', 5);
+        letterMap.put('С', 6);
+        letterMap.put('Р', 7);
+        letterMap.put('В', 8);
+        letterMap.put('Л', 9);
+        letterMap.put('К', 10);
+        letterMap.put('М', 11);
+        letterMap.put('Д', 12);
+        letterMap.put('П', 13);
+        letterMap.put('Я', 15);
+        letterMap.put('Ы', 16);
+        letterMap.put('Ь', 17);
+        letterMap.put('Г', 18);
+        letterMap.put('З', 19);
+        letterMap.put('Б', 20);
+        letterMap.put('Ч', 21);
+        letterMap.put('Й', 22);
+        letterMap.put('Х', 23);
+        letterMap.put('Ж', 24);
+        letterMap.put('Ш', 25);
+        letterMap.put('Ю', 26);
+        letterMap.put('Ц', 27);
+        letterMap.put('Щ', 28);
+        letterMap.put('Э', 29);
+        letterMap.put('Ф', 30);
+        letterMap.put('Ъ', 31);
+        letterMap.put('Ё', 32);
+        // пробел - символ по умолчанию
+        // letterMap.put(' ', 33);
 
         // словарь "ранг по частоте использования - буква"
         rangeMap.put(0, 'о');
@@ -84,6 +117,7 @@ public class SuggestService {
         rangeMap.put(30, 'ф');
         rangeMap.put(31, 'ъ');
         rangeMap.put(32, 'ё');
+        // пробел - символ по умолчанию
         rangeMap.put(33, ' ');
     }
 
@@ -91,7 +125,7 @@ public class SuggestService {
     private TrieNode currentNode;  // узел дерева, с которым сейчас работаем
 
     static int getLetterPos(char letter) {
-        return letterMap.get(letter);
+        return letterMap.getOrDefault(letter, ALPHABET_SIZE - 1);
     }
 
     static char getLetter(int pos) {

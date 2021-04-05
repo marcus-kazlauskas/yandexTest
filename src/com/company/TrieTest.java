@@ -127,7 +127,7 @@ public class TrieTest {
         // входные данные
         LinkedList<String> inputNames = new LinkedList<>();
         inputNames.addLast("слова");
-        inputNames.addLast("слово");
+        inputNames.addLast("словО");
         inputNames.addLast("словообразование");
         inputNames.addLast("слово божие");
         inputNames.addLast("слово пастыря");
@@ -148,5 +148,58 @@ public class TrieTest {
         }
         assertEquals(1, inputFound);
         assertEquals(numberOfSuggest, names.size());
+    }
+
+    @Test
+    public void test4() {
+        System.out.println("Тест 4: в названиях и input встречаются заглавные буквы и посторонние символы");
+
+        // входные данные
+        LinkedList<String> inputNames = new LinkedList<>();
+        inputNames.addLast("СЛОВА");
+        inputNames.addLast("слОво");
+        inputNames.addLast("словообразовАние");
+        inputNames.addLast("слово-Божие");
+        inputNames.addLast("слово/пастыря");
+        inputNames.addLast("словесность");
+        String input = "Слово";
+        int numberOfSuggest = 5;
+        System.out.println("input = " + input);
+        System.out.println("numberOfSuggest = " + numberOfSuggest);
+
+        SuggestService service = new SuggestService(inputNames);
+        int inputFound = 0;
+        List<String> names = service.suggest(input, numberOfSuggest);
+        for (String name : names) {
+            System.out.println(name);
+            if (name.equals(input.toLowerCase())) {
+                inputFound += 1;
+            }
+        }
+        assertEquals(1, inputFound);
+        assertTrue(numberOfSuggest > names.size());
+    }
+
+    @Test
+    public void test5() {
+        System.out.println("Тест 5: ни одно из названий не подходит под input");
+
+        // входные данные
+        LinkedList<String> inputNames = new LinkedList<>();
+        inputNames.addLast("слова");
+        inputNames.addLast("слово");
+        inputNames.addLast("словообразование");
+        inputNames.addLast("словесность");
+        String input = "а";
+        int numberOfSuggest = 5;
+        System.out.println("input = " + input);
+        System.out.println("numberOfSuggest = " + numberOfSuggest);
+
+        SuggestService service = new SuggestService(inputNames);
+        List<String> names = service.suggest(input, numberOfSuggest);
+        for (String name : names) {
+            System.out.println(name);
+        }
+        assertEquals(0, names.size());
     }
 }

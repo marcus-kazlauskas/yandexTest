@@ -73,6 +73,7 @@ public class TrieNode {
             letterArray[i] = letters.get(i);
         }
         String name = String.valueOf(letterArray);
+        name = name.toLowerCase();
         names.addLast(name);
     }
 
