@@ -202,4 +202,50 @@ public class TrieTest {
         }
         assertEquals(0, names.size());
     }
+
+    @Test
+    public void test6() {
+        System.out.println("Тест 6: проверка правильности словаря для всех букв");
+
+        LinkedList<String> inputNames = new LinkedList<>();
+        inputNames.addLast("ЙЦУКЕН ГШЩЗХЪЁ");
+        inputNames.addLast("ФЫВАПР ОЛДЖЭ");
+        inputNames.addLast("ЯЧСМИТ ЬБЮ/");
+        int numberOfSuggest = 5;
+        String input1 = "йцукен гшщзхъё";
+        String input2 = "фывапр олджэ";
+        String input3 = "ячсмит ьбю/";
+        List<String> names1;
+        List<String> names2;
+        List<String> names3;
+        System.out.println("inputNames:");
+        for (String name : inputNames) {
+            System.out.println(name);
+        }
+        SuggestService service = new SuggestService(inputNames);
+
+        System.out.println("input1 = " + input1);
+        System.out.println("names1:");
+        names1 = service.suggest(input1, numberOfSuggest);
+        for (String name : names1) {
+            System.out.println(name);
+        }
+        assertEquals(1, names1.size());
+
+        System.out.println("input2 = " + input2);
+        System.out.println("names2:");
+        names2 = service.suggest(input2, numberOfSuggest);
+        for (String name : names2) {
+            System.out.println(name);
+        }
+        assertEquals(1, names2.size());
+
+        System.out.println("input3 = " + input3);
+        System.out.println("names3:");
+        names3 = service.suggest(input3, numberOfSuggest);
+        for (String name : names3) {
+            System.out.println(name);
+        }
+        assertEquals(1, names3.size());
+    }
 }

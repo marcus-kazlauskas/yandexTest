@@ -50,6 +50,7 @@ public class SuggestService {
         letterMap.put('ё', 32);
         // продолжение словаря "буква - ранг по частоте использования" с заглавными буквами
         letterMap.put('О', 0);
+        letterMap.put('Е', 1);
         letterMap.put('А', 2);
         letterMap.put('И', 3);
         letterMap.put('Н', 4);
@@ -62,6 +63,7 @@ public class SuggestService {
         letterMap.put('М', 11);
         letterMap.put('Д', 12);
         letterMap.put('П', 13);
+        letterMap.put('У', 14);
         letterMap.put('Я', 15);
         letterMap.put('Ы', 16);
         letterMap.put('Ь', 17);
@@ -184,19 +186,19 @@ public class SuggestService {
     // добавление в список первых numberOfSuggest имён из дерева, имеющих общую часть input
     public List<String> suggest(String input, Integer numberOfSuggest) {
         LinkedList<String> names = new LinkedList<>();
-        ArrayList<Character> letters = new ArrayList<>();
+        ArrayList<Integer> lettersPos = new ArrayList<>();
         char[] inputLetters = input.toCharArray();
         for (char c : inputLetters) {
-            letters.add(c);
+            lettersPos.add(getLetterPos(c));
         }
 
         if (this.checkName(input, true)) {
-            this.currentNode.addLetters(names, letters);
-            this.currentNode.getName(names, letters, numberOfSuggest);
+            this.currentNode.addLetters(names, lettersPos);
+            this.currentNode.getName(names, lettersPos, numberOfSuggest);
             return Collections.unmodifiableList(names);
         }
         else if (this.checkName(input, false) || this.checkEmpty(input)) {
-            this.currentNode.getName(names, letters, numberOfSuggest);
+            this.currentNode.getName(names, lettersPos, numberOfSuggest);
             return Collections.unmodifiableList(names);
         }
         else {

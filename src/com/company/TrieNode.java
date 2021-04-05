@@ -67,38 +67,35 @@ public class TrieNode {
     }
 
     // добавления списка букв как новое слово в список
-    void addLetters(LinkedList<String> names, ArrayList<Character> letters) {
-        char[] letterArray = new char[letters.size()];
-        for (int i = 0; i < letters.size(); i++) {
-            letterArray[i] = letters.get(i);
+    void addLetters(LinkedList<String> names, ArrayList<Integer> lettersPos) {
+        char[] letterArray = new char[lettersPos.size()];
+        for (int i = 0; i < lettersPos.size(); i++) {
+            int pos = lettersPos.get(i);
+            letterArray[i] = SuggestService.getLetter(pos);
         }
         String name = String.valueOf(letterArray);
-        name = name.toLowerCase();
         names.addLast(name);
     }
 
     // рекурсивный обход узлов дерева с накоплением не более number имён
     // (наверное, тут бы пригодилась Scala)
-    void getName(LinkedList<String> names, ArrayList<Character> letters, Integer number) {
+    void getName(LinkedList<String> names, ArrayList<Integer> lettersPos, Integer number) {
         if (this.checkNode() && (names.size() < number)) {
-            char letter;
             TrieNode nextNode;
 
             for (int pos = 0; pos < SuggestService.ALPHABET_SIZE; pos++) {
                 if (this.checkLetterPos(pos, true) && (names.size() < number)) {
-                    letter = SuggestService.getLetter(pos);
-                    letters.add(letter);
-                    this.addLetters(names, letters);
+                    lettersPos.add(pos);
+                    this.addLetters(names, lettersPos);
                     nextNode = this.nextNode(pos);
-                    nextNode.getName(names, letters, number);
-                    letters.remove(letters.size() - 1);
+                    nextNode.getName(names, lettersPos, number);
+                    lettersPos.remove(lettersPos.size() - 1);
                 }
                 else if (this.checkLetterPos(pos, false) && (names.size() < number)) {
-                    letter = SuggestService.getLetter(pos);
-                    letters.add(letter);
+                    lettersPos.add(pos);
                     nextNode = this.nextNode(pos);
-                    nextNode.getName(names, letters, number);
-                    letters.remove(letters.size() - 1);
+                    nextNode.getName(names, lettersPos, number);
+                    lettersPos.remove(lettersPos.size() - 1);
                 }
             }
         }
