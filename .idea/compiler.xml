@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="yandexTest" target="11" />
+      <module name="yandexTest" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>
