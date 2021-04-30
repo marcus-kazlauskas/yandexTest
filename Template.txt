@@ -13,6 +13,6 @@ public class SuggestService {
 
 
 //Scala template
-class SuggestService(companyNames : Seq[String]) {
-    def suggest(input: String, numberOfSuggest : Int) : Seq[String] = ??? //TODO: Your code
+class SuggestService(companyNames: Seq[String]) {
+    def suggest(input: String, numberOfSuggest: Int): Seq[String] = ??? //TODO: Your code
 }
