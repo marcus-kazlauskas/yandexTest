@@ -1,6 +1,6 @@
 package com.company
 
-object MainScala{
+object MainScala {
   /**
    * Демонстрация работы
    * @param args: Array[String]

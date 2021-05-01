@@ -11,7 +11,7 @@ public class SuggestService {
     // словарь "буква - ранг по частоте использования"
     private static final Map<Character, Integer> letterMap = new HashMap<>(128);
     // словарь "ранг по частоте использования - буква"
-    private static final Map<Integer, Character> rangeMap = new HashMap<>(64);
+    private static final Map<Integer, Character> rankMap = new HashMap<>(64);
 
     static {
         // словарь "буква - ранг по частоте использования"
@@ -86,41 +86,41 @@ public class SuggestService {
         // letterMap.put(' ', 33);
 
         // словарь "ранг по частоте использования - буква"
-        rangeMap.put(0, 'о');
-        rangeMap.put(1, 'е');
-        rangeMap.put(2, 'а');
-        rangeMap.put(3, 'и');
-        rangeMap.put(4, 'н');
-        rangeMap.put(5, 'т');
-        rangeMap.put(6, 'с');
-        rangeMap.put(7, 'р');
-        rangeMap.put(8, 'в');
-        rangeMap.put(9, 'л');
-        rangeMap.put(10, 'к');
-        rangeMap.put(11, 'м');
-        rangeMap.put(12, 'д');
-        rangeMap.put(13, 'п');
-        rangeMap.put(14, 'у');
-        rangeMap.put(15, 'я');
-        rangeMap.put(16, 'ы');
-        rangeMap.put(17, 'ь');
-        rangeMap.put(18, 'г');
-        rangeMap.put(19, 'з');
-        rangeMap.put(20, 'б');
-        rangeMap.put(21, 'ч');
-        rangeMap.put(22, 'й');
-        rangeMap.put(23, 'х');
-        rangeMap.put(24, 'ж');
-        rangeMap.put(25, 'ш');
-        rangeMap.put(26, 'ю');
-        rangeMap.put(27, 'ц');
-        rangeMap.put(28, 'щ');
-        rangeMap.put(29, 'э');
-        rangeMap.put(30, 'ф');
-        rangeMap.put(31, 'ъ');
-        rangeMap.put(32, 'ё');
+        rankMap.put(0, 'о');
+        rankMap.put(1, 'е');
+        rankMap.put(2, 'а');
+        rankMap.put(3, 'и');
+        rankMap.put(4, 'н');
+        rankMap.put(5, 'т');
+        rankMap.put(6, 'с');
+        rankMap.put(7, 'р');
+        rankMap.put(8, 'в');
+        rankMap.put(9, 'л');
+        rankMap.put(10, 'к');
+        rankMap.put(11, 'м');
+        rankMap.put(12, 'д');
+        rankMap.put(13, 'п');
+        rankMap.put(14, 'у');
+        rankMap.put(15, 'я');
+        rankMap.put(16, 'ы');
+        rankMap.put(17, 'ь');
+        rankMap.put(18, 'г');
+        rankMap.put(19, 'з');
+        rankMap.put(20, 'б');
+        rankMap.put(21, 'ч');
+        rankMap.put(22, 'й');
+        rankMap.put(23, 'х');
+        rankMap.put(24, 'ж');
+        rankMap.put(25, 'ш');
+        rankMap.put(26, 'ю');
+        rankMap.put(27, 'ц');
+        rankMap.put(28, 'щ');
+        rankMap.put(29, 'э');
+        rankMap.put(30, 'ф');
+        rankMap.put(31, 'ъ');
+        rankMap.put(32, 'ё');
         // пробел - символ по умолчанию
-        rangeMap.put(33, ' ');
+        rankMap.put(33, ' ');
     }
 
     private final TrieNode root;  // корень дерева
@@ -131,7 +131,7 @@ public class SuggestService {
     }
 
     static char getLetter(int pos) {
-        return rangeMap.get(pos);
+        return rankMap.get(pos);
     }
 
     // добавление/удаление имени в дерево
