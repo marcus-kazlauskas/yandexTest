@@ -1,11 +1,10 @@
 package com.company
 
-import scala.collection.immutable.Map
+import scala.collection.immutable.HashMap
 
 class SuggestServiceScala(companyNames: Seq[String]) {
   /**
    * Саджест названий компаний по подстроке
-   * @return
    */
   def addName(name: String, value: Boolean): Unit = ???
 
@@ -29,7 +28,7 @@ object SuggestServiceScala {
   // размер алфавита
   val ALPHABET_SIZE = 34
   // словарь "ранг по частоте использования - буква"
-  private val letterMap = Map(
+  private val letterMap = HashMap(
     'о' -> 0,
     'е' -> 1,
     'а' -> 2,
@@ -100,7 +99,7 @@ object SuggestServiceScala {
     // пробел - символ по умолчанию
   )
   // словарь "ранг по частоте использования - буква"
-  private val rankMap = Map(
+  private val rankMap = HashMap(
     0 -> 'о',
     1 -> 'е',
     2 -> 'а',
